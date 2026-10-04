@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FinanceFlow — Cloud</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="auth-gate" id="authGate">
+  <div class="auth-card">
+    <div class="auth-brand"><div class="brand-mark">F</div><div><div class="brand-title">FinanceFlow</div><div class="sub">Secure cloud workspace</div></div></div>
+    <div class="eyebrow">WELCOME BACK</div>
+    <h1>Sign in to your finances</h1>
+    <p class="auth-copy">Your data is stored in Supabase and synced across devices after you sign in.</p>
+    <form id="loginForm" class="auth-form">
+      <label>Email<input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+      <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required placeholder="••••••••"></label>
+      <div id="authError" class="auth-error"></div>
+      <button id="loginBtn" class="btn primary auth-submit" type="submit">Sign in</button>
+    </form>
+    <div class="auth-foot">FinanceFlow V6 · Supabase cloud database</div>
+  </div>
+</div>
+<div class="app hidden" id="appShell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark">F</div><div><div class="brand-title">FinanceFlow</div><div class="sub">Personal finance OS</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span>Dashboard</button>
+      <button class="nav-btn" data-page="accounts"><span class="nav-icon">▣</span>Accounts</button>
+      <button class="nav-btn" data-page="income"><span class="nav-icon">↗</span>Income</button>
+      <button class="nav-btn" data-page="expenses"><span class="nav-icon">↘</span>Expenses</button>
+      <button class="nav-btn" data-page="transfers"><span class="nav-icon">⇄</span>Transfers</button>
+      <button class="nav-btn" data-page="budget"><span class="nav-icon">◔</span>Budget</button>
+      <div class="nav-label">Planning</div>
+      <button class="nav-btn" data-page="goals"><span class="nav-icon">◎</span>Goals</button>
+      <button class="nav-btn" data-page="subscriptions"><span class="nav-icon">↻</span>Subscriptions</button>
+      <button class="nav-btn" data-page="analysis"><span class="nav-icon">◫</span>Analysis</button>
+      <button class="nav-btn" data-page="reports"><span class="nav-icon">▥</span>Reports</button>
+      <div class="nav-label">System</div>
+      <button class="nav-btn" data-page="categories"><span class="nav-icon">◆</span>Categories</button>
+      <button class="nav-btn" data-page="areas"><span class="nav-icon">▦</span>Areas</button>
+      <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
+    </nav>
+    <div class="footer-profile"><div class="avatar" id="userAvatar">FF</div><div class="profile-copy"><div id="userEmail" style="font-size:11px;font-weight:800">FinanceFlow user</div><div class="sub" id="workspaceCurrency">USD workspace</div></div><button class="btn icon logout-mini" id="logoutBtn" title="Sign out">↪</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;gap:10px;align-items:flex-start"><button class="btn icon mobile-menu" id="mobileMenu">☰</button><div><div class="eyebrow" id="pageEyebrow">OVERVIEW</div><div class="title" id="pageTitle">Dashboard</div></div></div>
+      <div class="top-actions"><span class="sync-status" id="syncStatus">Cloud</span>
+        <div class="search-wrap" id="searchWrap"><input id="globalSearch" placeholder="Search this page…" /></div>
+        <button class="btn icon" id="searchBtn" title="Search">⌕</button>
+        <button class="btn icon" id="notifyBtn" title="Notifications">◌</button>
+        <button class="btn primary" id="addTransactionBtn">+ Add transaction</button>
+      </div>
+    </header>
+
+    <section class="page active" id="page-dashboard">
+      <div class="grid hero">
+        <article class="card featured"><div class="label">Total net worth</div><div class="value-xl" id="netWorth">$0.00</div><div class="mini"><span class="positive">● Live</span> · calculated from all accounts</div></article>
+        <article class="card"><div class="label">Income this month</div><div class="value-lg" id="monthIncome">$0.00</div><div class="mini positive" id="incomeCount">0 transactions</div></article>
+        <article class="card"><div class="label">Expenses this month</div><div class="value-lg" id="monthExpenses">$0.00</div><div class="mini" id="expenseCount">0 transactions</div><div class="mini" id="expenseRate" style="margin-top:5px">0% of income</div></article>
+      </div>
+      <div class="section-head"><div><h2>Accounts</h2><p>Your money at a glance</p></div><button class="btn small" data-jump="accounts">View all</button></div>
+      <div class="grid accounts-grid" id="accountCards"></div>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><div><h3>Monthly cash flow</h3><p>Last 6 months</p></div><button class="btn small" data-jump="reports">Reports</button></div><div class="bars" id="cashflowBars"></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Budget status</h3><p>Current month</p></div><button class="btn small" data-jump="budget">Details</button></div><div id="budgetList"></div></article>
+      </div>
+      <div class="grid two-col lower">
+        <article class="panel"><div class="panel-head"><div><h3>Recent activity</h3><p>Latest transactions</p></div><button class="btn small" data-jump="expenses">See all</button></div><div id="recentTransactions"></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Goals</h3><p>Progress overview</p></div><button class="btn small" data-jump="goals">Manage</button></div><div id="goalList"></div></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-generic">
+      <article class="panel page-panel">
+        <div class="panel-head"><div><h3 id="genericTitle">Page</h3><p id="genericSubtitle"></p></div><button class="btn primary small" id="genericAddBtn">+ Add</button></div>
+        <div class="toolbar"><div class="filters" id="pageFilters"></div><div class="mini" id="pageSummary"></div></div>
+        <div id="genericContent"></div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-head"><div><div class="eyebrow" id="modalEyebrow">NEW ENTRY</div><h2 id="modalTitle">Add transaction</h2></div><button class="btn icon" id="modalClose">×</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept="application/json" class="hidden" />
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/data.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/database.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/calculations.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
